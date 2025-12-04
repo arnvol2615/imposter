@@ -1,0 +1,84 @@
+Spesifikasjon for Appen "Imposter Who"-Variant
+1. Hovedmål og Konsept
+Målet er å lage en mobilapplikasjon (eller web-app) som legger til rette for et sosialt deduksjonsspill for 3 til 15 spillere lokalt, der spillerne prøver å identifisere en bedrager (Imposter) som ikke kjenner det hemmelige ordet.
+
+Antall spillere: 3 til 15.
+
+Spillmodus: Lokalt (Alle spillere bruker én delt enhet for å se rollen sin og ordet, før de starter diskusjonen).
+
+2. Funksjonell Spesifikasjon (Spillflyt)
+Spillet skal følge denne stegvise flyten:
+
+2.1. Spilloppsett
+A. Startskjerm: Brukeren starter spillet og angir antall spillere (N).
+
+B. Kategori/Ordtildeling: Appen velger tilfeldig:
+
+1. En kategori (f.eks., Mat, Filmer, Jobber).
+
+2. Et hemmelig ord fra den valgte kategorien (f.eks., "Banan").
+
+3. En Imposter skal velges tilfeldig blant N spillere (1 Imposter per spill).
+
+C. Visning av Roller/Ord: Appen viser rollen og ordet til hver spiller sekvensielt:
+
+Appen ber spiller 1 om å ta enheten.
+
+For vanlige spillere (Innocent/Citizen): Vis: "Du er: Borger" og "Ordet er: [Hemmelig Ord]" (f.eks., "Banan").
+
+For Imposteren: Vis: "Du er: Imposter" og "Ordet er: Imposter" (eller et ord som angir rollen, men ikke det hemmelige ordet).
+
+Hver spiller må trykke på en "OK / Skjul" knapp etter å ha lest, for å sikre at neste spiller ikke ser informasjonen deres. En kort nedtelling før informasjonen skjules er også nyttig.
+
+2.2. Spillfase
+Etter at alle har sett sin rolle/ord, skal appen vise en skjerm som indikerer at diskusjonen starter.
+
+Appen skal ha en valgfri funksjon for en Timer (f.eks., 60 sekunder) for å tvinge frem en tidsbegrenset diskusjon.
+
+Spillerne diskuterer og gir ledetråder (utenfor appen).
+
+2.3. Avstemningsfase
+Etter diskusjonen/timeren er over, skal appen indikere at avstemningen starter.
+
+Spillerne avstemmer (utenfor appen) om hvem de tror er Imposteren.
+
+Sluttresultat: Appen skal avsløre det hemmelige ordet og hvem som var Imposteren for å avgjøre resultatet.
+
+3. Data og Innhold
+Appen må ha et innebygd bibliotek av ord.
+
+Struktur: Dataene må lagres som kategorier som inneholder en liste over ord.
+
+Minimum Innhold:
+
+Kategorier (Minimum 10): Mat, Filmer, Jobber, Dyr, Steder, Hjemme, Sport, Klær, Natur, Kjente Mennesker.
+
+Antall Ord: Minimum 500 unike ord totalt (fordelt på kategoriene).
+
+Eksempel på dataformat (JSON/Array):
+
+JSON
+
+[
+  {
+    "kategori": "Mat",
+    "ordliste": ["Banan", "Pizza", "Sjokolade", "Brokkoli", ...]
+  },
+  {
+    "kategori": "Filmer",
+    "ordliste": ["Titanic", "Inception", "Avatar", ...]
+  }
+  // ... flere kategorier
+]
+4. Tekniske Krav og Brukergrensesnitt (UI)
+Plattform: Mobilvennlig grensesnitt (kan spesifiseres som iOS/Android/Web avhengig av K-modellen).
+
+Brukergrensesnitt (UI) Fokus:
+
+Enkelhet: Grensesnittet skal være rent og intuitivt, fokusert på funksjonalitet.
+
+Lesbarhet: Teksten som viser ordet/rollen må være stor og lettlest (spesielt for ordtildeling).
+
+Farge/Tema: Et enkelt mørkt eller lyst tema for å unngå distraksjoner.
+
+Ingen Kontoer / Ingen Pålogging: Spillet skal være "bare start å spille" uten behov for kontooppretting eller internettilkobling etter nedlasting (med unntak av oppdateringer).

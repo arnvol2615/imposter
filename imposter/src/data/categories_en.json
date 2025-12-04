@@ -1,0 +1,43 @@
+[
+  { "name": "Food", "words": [
+    "Banana","Pizza","Chocolate","Broccoli","Bread","Soup","Cheese","Yogurt","Chicken","Salmon","Ramen","Tacos","Pasta","Burger","Salad",
+    "Apple","Pear","Orange","Grapes","Strawberry","Blueberry","Raspberry","Watermelon","Pineapple","Mango","Kiwi","Lemon","Lime",
+    "Tomato","Cucumber","Bell Pepper","Carrot","Onion","Garlic","Spinach","Corn","Peas","Beans","Lentils","Chickpeas","Rice","Oats"
+  ]},
+  { "name": "Movies", "words": [
+    "Titanic","Inception","Avatar","The Matrix","Joker","Amelie","Interstellar","Gladiator","Casablanca","Forrest Gump","Parasite","La La Land","The Godfather","Pulp Fiction","The Dark Knight",
+    "Star Wars","Lord of the Rings","E.T.","Jurassic Park","Terminator","Alien","Blade Runner","Mad Max","Top Gun","Rocky","Karate Kid","Shawshank Redemption","Fight Club","Se7en","Memento"
+  ]},
+  { "name": "Jobs", "words": [
+    "Teacher","Doctor","Engineer","Chef","Carpenter","Pilot","Nurse","Designer","Programmer","Lawyer","Journalist","Electrician","Plumber","Farmer","Police Officer",
+    "Firefighter","Dentist","Photographer","Musician","Actor","Architect","Psychologist","Economist","Auditor","Shop Assistant","Waiter","Baker","Butcher","Researcher"
+  ]},
+  { "name": "Animals", "words": [
+    "Dog","Cat","Elephant","Lion","Owl","Dolphin","Giraffe","Panda","Fox","Horse","Seal","Penguin","Turtle","Kangaroo","Wolf",
+    "Bear","Polar Bear","Badger","Squirrel","Hare","Rabbit","Raven","Eagle","Hawk","Sparrow","Swallow","Duck","Goose","Swan","Hen"
+  ]},
+  { "name": "Places", "words": [
+    "Oslo","School","Hospital","Airport","Museum","Library","Cafe","Park","Stadium","Theatre","Square","Beach","Cabin","Office","Mall",
+    "Church","City Hall","Castle","Fortress","Campground","Harbor","Terminal","Station","Gas Station","Highway","Tunnel","Bridge","Mountain","Valley","Island"
+  ]},
+  { "name": "Home", "words": [
+    "Sofa","TV","Lamp","Rug","Vase","Chair","Table","Stove","Fridge","Bed","Pillowcase","Curtains","Bookshelf","Washing Machine","Mirror",
+    "Dishwasher","Microwave","Toaster","Kettle","Coffee Maker","Laundry Basket","Wardrobe","Drawer","Nightstand","Doormat","Vacuum","Iron","Hair Dryer","Toothbrush","Toothpaste"
+  ]},
+  { "name": "Sports", "words": [
+    "Football","Skiing","Tennis","Basketball","Swimming","Handball","Volleyball","Golf","Snowboard","Athletics","Badminton","Boxing","Rugby","Cycling","Skating",
+    "Archery","Climbing","Surfing","Sailing","Rowing","Kayak","Fencing","Judo","Karate","Taekwondo","Weightlifting","Crossfit","Triathlon","Marathon","Sprint"
+  ]},
+  { "name": "Clothes", "words": [
+    "Sweater","Pants","Shirt","Shoes","Jacket","Hat","Scarf","Dress","T-shirt","Shorts","Belt","Socks","Coat","Blazer","Tracksuit",
+    "Cap","Beanie","Mittens","Gloves","Boots","Sandals","Sneakers","Tie","Top","Cardigan","Pajamas","Underwear","Skirt","Leggings","Raincoat"
+  ]},
+  { "name": "Nature", "words": [
+    "Mountain","River","Forest","Beach","Ocean","Glacier","Volcano","Waterfall","Desert","Meadow","Plain","Cave","Canyon","Tundra","Cliff",
+    "Bog","Stream","Snow","Rain","Hail","Thunder","Lightning","Sunrise","Sunset","Aurora","Moon","Star","Meteor","Lagoon","Fjord"
+  ]},
+  { "name": "Famous People", "words": [
+    "Einstein","Beyonce","Elon Musk","Messi","Frida Kahlo","Greta Thunberg","Marie Curie","Leonardo da Vinci","Adele","Ronaldo","Obama","Madonna","Oprah","Newton","Usain Bolt",
+    "Taylor Swift","Ed Sheeran","Ariana Grande","Bill Gates","Steve Jobs","Mark Zuckerberg","Angelina Jolie","Brad Pitt","Tom Hanks","Meryl Streep","Keanu Reeves","Emma Watson","Daniel Radcliffe","Harrison Ford","Scarlett Johansson"
+  ]}
+]
