@@ -45,7 +45,7 @@ function pickCategoryAndWord(last?: { category?: string; word?: string }, lang: 
 
 function Card(props: { title: string; children: React.ReactNode }) {
   return (
-    <section style={{background:'#1c1c1c',borderRadius:12,padding:24,boxShadow:'0 6px 16px rgba(0,0,0,0.35)'}}>
+    <section style={{background:'#1c1c1c',borderRadius:12,padding:24,boxShadow:'0 6px 16px rgba(0,0,0,0.35)',width:'100%',maxWidth:'100%',boxSizing:'border-box',display:'block'}}>
       <h1 style={{fontSize:28,marginTop:0}}>{props.title}</h1>
       <div>{props.children}</div>
     </section>
@@ -160,8 +160,8 @@ export default function ClassicApp({ onChangeMode }: { onChangeMode?: (m: 'class
   function reset() { setPhase('setup'); setState(null); setCountdown(null) }
 
   return (
-    <main style={{minHeight:'100vh',display:'grid',placeItems:'center'}}>
-      <div style={{maxWidth:600,width:'100%'}}>
+    <main style={{minHeight:'100vh',display:'grid',placeItems:'center',padding:'16px'}}>
+      <div style={{maxWidth:840,width:'100%'}}>
         {phase === 'setup' && (
           <Setup onStart={initGame} language={language} onLanguageChange={(l)=>{ setLanguage(l); try { localStorage.setItem('imposterwho:lang', l) } catch {} }} onChangeMode={onChangeMode} />
         )}
@@ -194,9 +194,8 @@ function PreReveal({ language, category, onBegin }: { language: Language; catego
   return (
     <Card title={t(language,'setupTitle')}>
       <div style={{display:'grid',gap:16,textAlign:'center'}}>
-        <div style={{fontSize:18,opacity:0.85}}>{t(language,'category')}</div>
-        <div style={{fontSize:24,marginBottom:16}}>{category}</div>
         <div style={{opacity:0.8}}>{t(language,'handDeviceToPlayer1')}</div>
+        <div style={{opacity:0.7,fontSize:14}}>{language==='en' ? 'Note: The category is hidden here to avoid revealing it if player 1 is the Imposter.' : 'Merk: Kategorien vises ikke her for å unngå avsløring hvis spiller 1 er imposter.'}</div>
         <button onClick={onBegin} style={{padding:'12px 16px',borderRadius:8,border:'none',background:'#4f46e5',color:'#fff',fontWeight:600}}>{t(language,'showFirstPlayer')}</button>
       </div>
     </Card>
@@ -302,7 +301,15 @@ function Reveal({ playerIndex, totalPlayers, role, word, category, onNext, langu
 }
 
 const styleEl = document.getElementById('imposter-style')
-if (!styleEl) { const el = document.createElement('style'); el.id = 'imposter-style'; el.innerHTML = `@keyframes iconfade { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(0.9); } }`; document.head.appendChild(el) }
+if (!styleEl) {
+  const el = document.createElement('style')
+  el.id = 'imposter-style'
+  el.innerHTML = `
+    *, *::before, *::after { box-sizing: border-box; }
+    @keyframes iconfade { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(0.9); } }
+  `
+  document.head.appendChild(el)
+}
 
 function Discussion({ category, onStartTimer, timerEnabled, seconds, countdown, onEnd, language }: { category: string; onStartTimer: () => void; timerEnabled: boolean; seconds: number; countdown: number | null; onEnd: () => void; language: Language }) {
   return (
