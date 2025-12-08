@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { CATEGORIES as NO_CATEGORIES } from './data/categories'
 import EN_CATEGORIES from './data/categories_en.json'
 
-type Phase = 'setup' | 'reveal' | 'discussion' | 'reveal-result'
+type Phase = 'setup' | 'pre-reveal' | 'reveal' | 'discussion' | 'reveal-result'
 type Language = 'no' | 'en'
 
 type GameState = {
@@ -97,7 +97,7 @@ export function App() {
       timerSeconds,
     }
     setState(gameState)
-    setPhase('reveal')
+    setPhase('pre-reveal')
     // Persist last used category/word for next round to avoid immediate repeats
     try { localStorage.setItem('imposterwho:last', JSON.stringify({ category, word })) } catch {}
   }
@@ -159,6 +159,14 @@ export function App() {
           />
         )}
 
+        {phase === 'pre-reveal' && state && (
+          <PreReveal
+            language={language}
+            category={state.category}
+            onBegin={() => setPhase('reveal')}
+          />
+        )}
+
         {phase === 'discussion' && state && (
           <Discussion
             category={state.category}
@@ -204,6 +212,8 @@ function t(lang: Language, key: string) {
     timer: 'Timer under diskusjon',
     timerSeconds: 'Timer-sekunder',
     start: 'Start',
+    showFirstPlayer: 'Vis første spiller',
+    handDeviceToPlayer1: 'Gi enheten til spiller 1 og trykk knappen nedenfor.',
     revealTitle: 'Spiller # {cur}/{total}',
     category: 'Kategori',
     youAre: 'Du er',
@@ -231,6 +241,8 @@ function t(lang: Language, key: string) {
     timer: 'Discussion timer',
     timerSeconds: 'Timer seconds',
     start: 'Start',
+    showFirstPlayer: 'Show first player',
+    handDeviceToPlayer1: 'Hand the device to player 1 and press the button below.',
     revealTitle: 'Player # {cur}/{total}',
     category: 'Category',
     youAre: 'You are',
@@ -250,6 +262,18 @@ function t(lang: Language, key: string) {
   }
   const dict = lang === 'en' ? en : no
   return dict[key] ?? key
+}
+function PreReveal({ language, category, onBegin }: { language: Language; category: string; onBegin: () => void }) {
+  return (
+    <Card title={t(language,'setupTitle')}>
+      <div style={{display:'grid',gap:16,textAlign:'center'}}>
+        <div style={{fontSize:18,opacity:0.85}}>{t(language,'category')}</div>
+        <div style={{fontSize:24,marginBottom:16}}>{category}</div>
+        <div style={{opacity:0.8}}>{t(language,'handDeviceToPlayer1')}</div>
+        <button onClick={onBegin} style={{padding:'12px 16px',borderRadius:8,border:'none',background:'#4f46e5',color:'#fff',fontWeight:600}}>{t(language,'showFirstPlayer')}</button>
+      </div>
+    </Card>
+  )
 }
 
 function Setup({ onStart, language, onLanguageChange }: { onStart: (players: number, imposters: number, timerEnabled: boolean, timerSeconds: number) => void; language: Language; onLanguageChange: (l: Language) => void }) {
