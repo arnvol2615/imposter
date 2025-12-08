@@ -333,6 +333,7 @@ function Setup({ onStart, language, onLanguageChange }: { onStart: (players: num
 
 function Reveal({ playerIndex, totalPlayers, role, word, category, onNext, language }: { playerIndex: number; totalPlayers: number; role: 'Imposter' | 'Borger'; word: string; category: string; onNext: () => void; language: Language }) {
   const [visible, setVisible] = useState(true)
+  const isLast = playerIndex + 1 >= totalPlayers
 
   return (
     <Card title={t(language,'revealTitle').replace('{cur}', String(playerIndex+1)).replace('{total}', String(totalPlayers))}>
@@ -358,7 +359,7 @@ function Reveal({ playerIndex, totalPlayers, role, word, category, onNext, langu
         {visible ? (
           <button onClick={()=>setVisible(false)} style={{padding:'12px 16px',borderRadius:8,border:'none',background:'#e11d48',color:'#fff',fontWeight:600}}>{t(language,'okHide')}</button>
         ) : (
-          <button onClick={()=>{ setVisible(true); onNext(); }} style={{padding:'12px 16px',borderRadius:8,border:'none',background:'#22c55e',color:'#000',fontWeight:700}}>{t(language,'nextPlayer')}</button>
+          <button onClick={()=>{ setVisible(true); onNext(); }} style={{padding:'12px 16px',borderRadius:8,border:'none',background:'#22c55e',color:'#000',fontWeight:700}}>{isLast ? (language==='en' ? 'Start round' : 'Start runde') : t(language,'nextPlayer')}</button>
         )}
       </div>
     </Card>
