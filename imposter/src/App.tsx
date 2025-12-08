@@ -222,6 +222,7 @@ function t(lang: Language, key: string) {
     wordIs: 'Ordet er',
     okHide: 'OK / Skjul',
     nextPlayer: 'Neste spiller',
+    showPlayerNumber: 'Vis spiller # {num}',
     discussionTitle: 'Diskusjon',
     timerOffHint: 'Timer av. Trykk "Neste" når dere er klare.',
     startTimer: 'Start timer ({seconds}s)',
@@ -251,6 +252,7 @@ function t(lang: Language, key: string) {
     wordIs: 'The word is',
     okHide: 'OK / Hide',
     nextPlayer: 'Next player',
+    showPlayerNumber: 'Show player # {num}',
     discussionTitle: 'Discussion',
     timerOffHint: 'Timer off. Press "Next" when ready.',
     startTimer: 'Start timer ({seconds}s)',
@@ -381,9 +383,22 @@ function Reveal({ playerIndex, totalPlayers, role, word, category, onNext, langu
         </div>
 
         {visible ? (
-          <button onClick={()=>setVisible(false)} style={{padding:'12px 16px',borderRadius:8,border:'none',background:'#e11d48',color:'#fff',fontWeight:600}}>{t(language,'okHide')}</button>
+          <button
+            onClick={()=>{
+              // Hide current player's info; next action button will drive progression
+              setVisible(false)
+            }}
+            style={{padding:'12px 16px',borderRadius:8,border:'none',background:'#e11d48',color:'#fff',fontWeight:600}}
+          >
+            {t(language,'okHide')}
+          </button>
         ) : (
-          <button onClick={()=>{ setVisible(true); onNext(); }} style={{padding:'12px 16px',borderRadius:8,border:'none',background:'#22c55e',color:'#000',fontWeight:700}}>{isLast ? (language==='en' ? 'Start round' : 'Start runde') : t(language,'nextPlayer')}</button>
+          <button
+            onClick={()=>{ setVisible(true); onNext(); }}
+            style={{padding:'12px 16px',borderRadius:8,border:'none',background:'#22c55e',color:'#000',fontWeight:700}}
+          >
+            {isLast ? (language==='en' ? 'Start round' : 'Start runde') : t(language,'showPlayerNumber').replace('{num}', String(playerIndex+1))}
+          </button>
         )}
       </div>
     </Card>
