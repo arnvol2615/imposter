@@ -22,7 +22,7 @@ function getRoles(lang: Language) { return lang === 'en' ? ROLES_EN : ROLES_NO }
 
 function Card(props: { title: string; children: React.ReactNode; right?: React.ReactNode }) {
   return (
-    <section style={{background:'#1c1c1c',borderRadius:12,padding:24,boxShadow:'0 6px 16px rgba(0,0,0,0.35)',width:'100%',maxWidth:'100%',boxSizing:'border-box',display:'block'}}>
+    <section style={{background:'#1c1c1c',borderRadius:12,padding:24,boxShadow:'0 6px 16px rgba(0,0,0,0.35)'}}>
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
         <h1 style={{fontSize:28,marginTop:0,marginBottom:0}}>{props.title}</h1>
         {props.right && (
@@ -92,8 +92,8 @@ export default function SpyfallApp({ onChangeMode }: { onChangeMode?: (m: 'class
   function reset() { setPhase('setup'); setState(null); setCountdown(null) }
 
   return (
-    <main style={{minHeight:'100vh',display:'grid',placeItems:'center',padding:'16px'}}>
-      <div style={{maxWidth:840,width:'100%',boxSizing:'border-box'}}>
+    <main style={{minHeight:'100vh',display:'grid',placeItems:'center',padding:'24px'}}>
+      <div style={{width:'100%',boxSizing:'border-box'}}>
         {phase === 'setup' && (
           <Setup onStart={initGame} language={language} onLanguageChange={(l)=>{ setLanguage(l); try { localStorage.setItem('imposterwho:lang', l) } catch {} }} onOpenHowTo={()=>setPhase('howto')} onChangeMode={onChangeMode} />
         )}

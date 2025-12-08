@@ -45,7 +45,7 @@ function pickCategoryAndWord(last?: { category?: string; word?: string }, lang: 
 
 function Card(props: { title: string; children: React.ReactNode }) {
   return (
-    <section style={{background:'#1c1c1c',borderRadius:12,padding:24,boxShadow:'0 6px 16px rgba(0,0,0,0.35)',width:'100%',maxWidth:'100%',boxSizing:'border-box',display:'block'}}>
+    <section style={{background:'#1c1c1c',borderRadius:12,padding:24,boxShadow:'0 6px 16px rgba(0,0,0,0.35)'}}>
       <h1 style={{fontSize:28,marginTop:0}}>{props.title}</h1>
       <div>{props.children}</div>
     </section>
@@ -160,8 +160,8 @@ export default function ClassicApp({ onChangeMode }: { onChangeMode?: (m: 'class
   function reset() { setPhase('setup'); setState(null); setCountdown(null) }
 
   return (
-    <main style={{minHeight:'100vh',display:'grid',placeItems:'center',padding:'16px'}}>
-      <div style={{maxWidth:840,width:'100%'}}>
+    <main style={{minHeight:'100vh',display:'grid',placeItems:'center',padding:'24px'}}>
+      <div style={{width:'100%'}}>
         {phase === 'setup' && (
           <Setup onStart={initGame} language={language} onLanguageChange={(l)=>{ setLanguage(l); try { localStorage.setItem('imposterwho:lang', l) } catch {} }} onChangeMode={onChangeMode} />
         )}
