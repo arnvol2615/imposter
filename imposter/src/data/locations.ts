@@ -13,7 +13,26 @@ export const LOCATIONS = [
   'Hotel',
   'Stadium',
   'Park',
-  'Library'
+  'Library',
+  'Cinema',
+  'Police Station',
+  'Fire Station',
+  'Amusement Park',
+  'Zoo',
+  'Farm',
+  'Harbor',
+  'Prison',
+  'Castle',
+  'Church',
+  'Cemetery',
+  'Factory',
+  'Construction Site',
+  'Courtroom',
+  'Subway',
+  'Mountain Cabin',
+  'Ski Resort',
+  'Space Station',
+  'TV Studio'
 ]
 
 export const LOCATIONS_NO = [
@@ -31,5 +50,24 @@ export const LOCATIONS_NO = [
   'Hotell',
   'Stadion',
   'Park',
-  'Bibliotek'
+  'Bibliotek',
+  'Kino',
+  'Politistasjon',
+  'Brannstasjon',
+  'Fornøyelsespark',
+  'Dyrehage',
+  'Gård',
+  'Havn',
+  'Fengsel',
+  'Slott',
+  'Kirke',
+  'Kirkegård',
+  'Fabrikk',
+  'Byggeplass',
+  'Rettssal',
+  'T-bane',
+  'Fjellhytte',
+  'Skianlegg',
+  'Romstasjon',
+  'TV-studio'
 ]

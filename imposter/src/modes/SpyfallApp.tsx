@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { LOCATIONS, LOCATIONS_NO } from '../data/locations'
 import { ROLES_EN, ROLES_NO } from '../data/location_roles.js'
+import SpyfallDescriptionNO from '../content/spyfall_no'
 
 type Phase = 'setup' | 'howto' | 'pre-reveal' | 'reveal' | 'discussion' | 'reveal-result'
 type Language = 'no' | 'en'
@@ -49,7 +50,6 @@ export default function SpyfallApp({ onChangeMode }: { onChangeMode?: (m: 'class
     const location = locations[randomInt(locations.length)]
     const roles = getRoles(language)[location] || []
 
-    // Assign roles to non-imposters; imposters get null roles
     const indices: number[] = []
     while (indices.length < imposterCount) { const r = randomInt(playerCount); if (!indices.includes(r)) indices.push(r) }
     const roleAssignments: (string|null)[] = new Array(playerCount).fill(null)
@@ -326,34 +326,7 @@ function HowTo({ language, onBack }: { language: Language; onBack: () => void })
             </ol>
           </div>
         ) : (
-          <div>
-            Så gøy at du spør om <b>Spyfall</b>! Det er et veldig populært og underholdende partyspill som går ut på bløffing og å stille de riktige (og feil) spørsmålene.
-            <hr />
-            <h3>🕵️ Slik Spilles Spyfall</h3>
-            <p>Spyfall spilles over flere korte runder, vanligvis med 3 til 8 spillere.</p>
-            <h4>1. Oppsett av runden</h4>
-            <ul>
-              <li>Alle spillere får et kort.</li>
-              <li><b>Ikke-spionene</b> får et kort som viser samme <b>hemmelige sted</b> og en unik <b>rolle</b> på det stedet.</li>
-              <li><b>Én spiller</b> får et kort hvor det kun står <b>"Spion"</b>. Spionen vet ikke stedet.</li>
-            </ul>
-            <h4>2. Mål</h4>
-            <table><thead><tr><th>Spillergruppe</th><th>Mål</th></tr></thead><tbody><tr><td><b>Ikke-spioner</b></td><td>Å identifisere og anklage Spionen <b>før</b> Spionen gjetter stedet.</td></tr><tr><td><b>Spionen</b></td><td>Å lytte og identifisere stedet, samtidig som de unngår mistanke.</td></tr></tbody></table>
-            <h4>3. Spørsmål og Svar</h4>
-            <ul>
-              <li>En tidsbegrenset runde starter (ofte 8 minutter).</li>
-              <li>Spillerne bytter på å stille spørsmål om stedet.</li>
-              <li><b>Ikke-spionene</b> må være spesifikke nok til å vise at de vet stedet, men vage nok til å ikke røpe det.</li>
-              <li><b>Spionen</b> må svare forsiktig og stille lure spørsmål for å blande seg.</li>
-            </ul>
-            <blockquote><b>Eksempel:</b> Hvis stedet er "Sirkus", spør: "Hvorfor er du kledd så rart?"</blockquote>
-            <h4>4. Avslutning</h4>
-            <ol>
-              <li><b>Anklagelse:</b> Hvem som helst kan anklage; hvis alle er enige, avslør kortet. Spion = borgere vinner; feil = spion vinner.</li>
-              <li><b>Spionen gjetter stedet:</b> Riktig = spion vinner; feil = borgere vinner.</li>
-              <li><b>Tiden renner ut:</b> Avslutt med avstemning; riktig = borgere vinner; feil/ingen enighet = spion vinner.</li>
-            </ol>
-          </div>
+          <SpyfallDescriptionNO />
         )}
         <div style={{display:'flex',justifyContent:'flex-end'}}>
           <button onClick={onBack} style={{padding:'8px 12px',borderRadius:8,border:'none',background:'#4f46e5',color:'#fff',fontWeight:600}}>{language==='en' ? 'Back' : 'Tilbake'}</button>
