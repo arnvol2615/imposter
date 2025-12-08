@@ -19,10 +19,15 @@ function randomInt(maxExclusive: number) { return Math.floor(Math.random() * max
 function getLocations(lang: Language) { return lang === 'en' ? LOCATIONS : LOCATIONS_NO }
 function getRoles(lang: Language) { return lang === 'en' ? ROLES_EN : ROLES_NO }
 
-function Card(props: { title: string; children: React.ReactNode }) {
+function Card(props: { title: string; children: React.ReactNode; right?: React.ReactNode }) {
   return (
     <section style={{background:'#1c1c1c',borderRadius:12,padding:24,boxShadow:'0 6px 16px rgba(0,0,0,0.35)'}}>
-      <h1 style={{fontSize:28,marginTop:0}}>{props.title}</h1>
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+        <h1 style={{fontSize:28,marginTop:0,marginBottom:0}}>{props.title}</h1>
+        {props.right && (
+          <div aria-hidden="true" style={{marginLeft:12}}>{props.right}</div>
+        )}
+      </div>
       <div>{props.children}</div>
     </section>
   )
@@ -214,9 +219,10 @@ function Reveal({ playerIndex, totalPlayers, isImposter, location, role, onNext,
   const [visible, setVisible] = useState(true)
   const isLast = playerIndex + 1 >= totalPlayers
   return (
-    <Card title={(language==='en' ? 'Player # {cur}/{total}' : 'Spiller # {cur}/{total}').replace('{cur}', String(playerIndex+1)).replace('{total}', String(totalPlayers))}>
-      <div style={{display:'grid',gap:24,textAlign:'center',position:'relative'}}>
-        <div style={{position:'absolute',top:0,right:0,fontSize:36,filter: isImposter ? 'drop-shadow(0 0 6px rgba(225,29,72,0.6))' : 'drop-shadow(0 0 6px rgba(34,197,94,0.6))',transform:'scale(0.9)',transition:'transform 250ms ease, filter 250ms ease',animation:'iconfade 350ms ease'}} aria-hidden="true" onMouseEnter={(e)=>{ (e.currentTarget as HTMLDivElement).style.transform = 'scale(1)' }} onMouseLeave={(e)=>{ (e.currentTarget as HTMLDivElement).style.transform = 'scale(0.9)' }}>{isImposter ? '🎭' : '🛡️'}</div>
+    <Card title={(language==='en' ? 'Player # {cur}/{total}' : 'Spiller # {cur}/{total}').replace('{cur}', String(playerIndex+1)).replace('{total}', String(totalPlayers))} right={
+      <div style={{fontSize:32,filter: isImposter ? 'drop-shadow(0 0 6px rgba(225,29,72,0.6))' : 'drop-shadow(0 0 6px rgba(34,197,94,0.6))',transform:'scale(0.9)',transition:'transform 250ms ease, filter 250ms ease',animation:'iconfade 350ms ease'}} onMouseEnter={(e)=>{ (e.currentTarget as HTMLDivElement).style.transform = 'scale(1)' }} onMouseLeave={(e)=>{ (e.currentTarget as HTMLDivElement).style.transform = 'scale(0.9)' }}>{isImposter ? '🎭' : '🛡️'}</div>
+    }>
+      <div style={{display:'grid',gap:24,textAlign:'center'}}>
         <div style={{opacity:visible?1:0,transition:'opacity 300ms'}}>
           {!isImposter && (
             <>
