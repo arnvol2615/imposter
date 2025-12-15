@@ -177,7 +177,7 @@ export default function ClassicApp({ onChangeMode }: { onChangeMode?: (m: 'class
           />
         )}
         {phase === 'pre-reveal' && state && (
-          <PreReveal language={language} category={state.category} onBegin={() => setPhase('reveal')} />
+          <PreReveal language={language} totalPlayers={state.playerCount} onBegin={() => setPhase('reveal')} />
         )}
         {phase === 'discussion' && state && (
           <Discussion category={state.category} onStartTimer={startCountdown} timerEnabled={state.timerEnabled} seconds={state.timerSeconds} countdown={countdown} onEnd={() => setPhase('reveal-result')} language={language} />
@@ -190,13 +190,13 @@ export default function ClassicApp({ onChangeMode }: { onChangeMode?: (m: 'class
   )
 }
 
-function PreReveal({ language, category, onBegin }: { language: Language; category: string; onBegin: () => void }) {
+function PreReveal({ language, totalPlayers, onBegin }: { language: Language; totalPlayers: number; onBegin: () => void }) {
   return (
-    <Card title={t(language,'setupTitle')}>
+    <Card title={t(language,'revealTitle').replace('{cur}', '1').replace('{total}', String(totalPlayers))}>
       <div style={{display:'grid',gap:16,textAlign:'center'}}>
-        <div style={{opacity:0.8}}>{t(language,'handDeviceToPlayer1')}</div>
-        <div style={{opacity:0.7,fontSize:14}}>{language==='en' ? 'Note: The category is hidden here to avoid revealing it if player 1 is the Imposter.' : 'Merk: Kategorien vises ikke her for å unngå avsløring hvis spiller 1 er imposter.'}</div>
-        <button onClick={onBegin} style={{padding:'12px 16px',borderRadius:8,border:'none',background:'#4f46e5',color:'#fff',fontWeight:600}}>{t(language,'showFirstPlayer')}</button>
+        <button onClick={onBegin} style={{padding:'12px 16px',borderRadius:8,border:'none',background:'#22c55e',color:'#000',fontWeight:700}}>
+          {t(language,'showPlayerNumber').replace('{num}', '1')}
+        </button>
       </div>
     </Card>
   )
@@ -293,7 +293,7 @@ function Reveal({ playerIndex, totalPlayers, role, word, category, onNext, langu
         {visible ? (
           <button onClick={()=>{ setVisible(false) }} style={{padding:'12px 16px',borderRadius:8,border:'none',background:'#e11d48',color:'#fff',fontWeight:600}}>{t(language,'okHide')}</button>
         ) : (
-          <button onClick={()=>{ setVisible(true); onNext(); }} style={{padding:'12px 16px',borderRadius:8,border:'none',background:'#22c55e',color:'#000',fontWeight:700}}>{isLast ? (language==='en' ? 'Start round' : 'Start runde') : t(language,'showPlayerNumber').replace('{num}', String(playerIndex+1))}</button>
+          <button onClick={()=>{ setVisible(true); onNext(); }} style={{padding:'12px 16px',borderRadius:8,border:'none',background:'#22c55e',color:'#000',fontWeight:700}}>{isLast ? (language==='en' ? 'Start round' : 'Start runde') : t(language,'showPlayerNumber').replace('{num}', String(playerIndex+2))}</button>
         )}
       </div>
     </Card>
