@@ -32,7 +32,17 @@ export const LOCATIONS = [
   'Mountain Cabin',
   'Ski Resort',
   'Space Station',
-  'TV Studio'
+  'TV Studio',
+  'Circus',
+  'Aquarium',
+  'University',
+  'Bakery',
+  'Casino',
+  'Cruise Ship',
+  'Art Gallery',
+  'Concert Hall',
+  'Embassy',
+  'Campsite'
 ]
 
 export const LOCATIONS_NO = [
@@ -69,5 +79,15 @@ export const LOCATIONS_NO = [
   'Fjellhytte',
   'Skianlegg',
   'Romstasjon',
-  'TV-studio'
+  'TV-studio',
+  'Sirkus',
+  'Akvarium',
+  'Universitet',
+  'Bakeri',
+  'Kasino',
+  'Cruiseskip',
+  'Kunstgalleri',
+  'Konserthus',
+  'Ambassade',
+  'Campingplass'
 ]
