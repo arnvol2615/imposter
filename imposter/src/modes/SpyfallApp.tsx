@@ -20,16 +20,26 @@ function randomInt(maxExclusive: number) { return Math.floor(Math.random() * max
 function getLocations(lang: Language) { return lang === 'en' ? LOCATIONS : LOCATIONS_NO }
 function getRoles(lang: Language) { return lang === 'en' ? ROLES_EN : ROLES_NO }
 
-function Card(props: { title: string; children: React.ReactNode; right?: React.ReactNode }) {
+function Card(props: { title: string; children: React.ReactNode; right?: React.ReactNode; height?: string }) {
   return (
-    <section style={{background:'#1c1c1c',borderRadius:12,padding:24,boxShadow:'0 6px 16px rgba(0,0,0,0.35)'}}>
+    <section style={{
+      background:'#1c1c1c',
+      borderRadius:12,
+      padding:24,
+      boxShadow:'0 6px 16px rgba(0,0,0,0.35)',
+      width:'min(720px, 100%)',
+      height: props.height ?? 'min(560px, 80vh)',
+      margin:'0 auto',
+      display:'flex',
+      flexDirection:'column'
+    }}>
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
         <h1 style={{fontSize:28,marginTop:0,marginBottom:0}}>{props.title}</h1>
         {props.right && (
           <div aria-hidden="true" style={{marginLeft:12}}>{props.right}</div>
         )}
       </div>
-      <div>{props.children}</div>
+      <div style={{flex:1,overflowY:'auto'}}>{props.children}</div>
     </section>
   )
 }
@@ -93,7 +103,7 @@ export default function SpyfallApp({ onChangeMode }: { onChangeMode?: (m: 'class
 
   return (
     <main style={{minHeight:'100vh',display:'grid',placeItems:'center',padding:'24px'}}>
-      <div style={{width:'100%',boxSizing:'border-box'}}>
+      <div style={{width:'100%',boxSizing:'border-box',display:'flex',justifyContent:'center'}}>
         {phase === 'setup' && (
           <Setup onStart={initGame} language={language} onLanguageChange={(l)=>{ setLanguage(l); try { localStorage.setItem('imposterwho:lang', l) } catch {} }} onOpenHowTo={()=>setPhase('howto')} onChangeMode={onChangeMode} />
         )}
@@ -128,10 +138,14 @@ export default function SpyfallApp({ onChangeMode }: { onChangeMode?: (m: 'class
 function PreReveal({ language, location, onBegin }: { language: Language; location: string; onBegin: () => void }) {
   return (
     <Card title={language==='en' ? 'Spyfall – Setup' : 'Spyfall – Oppsett'}>
-      <div style={{display:'grid',gap:16,textAlign:'center'}}>
-        <div style={{opacity:0.8}}>{language==='en' ? 'Hand the device to player 1 who will reveal their role.' : 'Gi enheten til spiller 1 som vil avsløre sin rolle.'}</div>
-        <div style={{opacity:0.7,fontSize:14}}>{language==='en' ? 'Note: The location is hidden here to avoid revealing it if player 1 is the Spy.' : 'Merk: Stedet vises ikke her for å unngå avsløring hvis spiller 1 er spion.'}</div>
-        <button onClick={onBegin} style={{padding:'12px 16px',borderRadius:8,border:'none',background:'#4f46e5',color:'#fff',fontWeight:600}}>{language==='en' ? 'Show first player' : 'Vis første spiller'}</button>
+      <div style={{display:'grid',gridTemplateRows:'1fr auto',height:'100%'}}>
+        <div style={{display:'grid',gap:16,textAlign:'center'}}>
+          <div style={{opacity:0.8}}>{language==='en' ? 'Hand the device to player 1 who will reveal their role.' : 'Gi enheten til spiller 1 som vil avsløre sin rolle.'}</div>
+          <div style={{opacity:0.7,fontSize:14}}>{language==='en' ? 'Note: The location is hidden here to avoid revealing it if player 1 is the Spy.' : 'Merk: Stedet vises ikke her for å unngå avsløring hvis spiller 1 er spion.'}</div>
+        </div>
+        <div style={{display:'flex',justifyContent:'center'}}>
+          <button onClick={onBegin} style={{padding:'12px 16px',borderRadius:8,border:'none',background:'#22c55e',color:'#000',fontWeight:700}}>{language==='en' ? 'Show first player' : 'Vis første spiller'}</button>
+        </div>
       </div>
     </Card>
   )
@@ -169,47 +183,50 @@ function Setup({ onStart, language, onLanguageChange, onOpenHowTo, onChangeMode 
 
   return (
     <Card title={language==='en' ? 'Spyfall – Setup' : 'Spyfall – Oppsett'}>
-      <div style={{display:'grid',gap:16}}>
-        {onChangeMode && (
-          <div style={{display:'flex',justifyContent:'flex-end'}}>
-            <button onClick={()=>onChangeMode('classic')} style={{padding:'8px 12px',borderRadius:8,border:'1px solid #333',background:'#151515',color:'#fff'}}>{language==='en' ? 'Switch to Classic' : 'Bytt til Klassisk'}</button>
+      <div style={{display:'grid',gridTemplateRows:'1fr auto',height:'100%'}}>
+        <div style={{display:'grid',gap:16}}>
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+            <label style={{display:'grid',gap:8}}>
+              <span>{language==='en' ? 'Language' : 'Språk'}</span>
+              <select value={language} onChange={(e)=>onLanguageChange((e.target.value as Language))} style={{padding:'8px 12px',borderRadius:8,border:'1px solid #333',background:'#151515',color:'#fff'}}>
+                <option value="no">Norsk</option>
+                <option value="en">English</option>
+              </select>
+            </label>
+            
           </div>
-        )}
-        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+
           <label style={{display:'grid',gap:8}}>
-            <span>{language==='en' ? 'Language' : 'Språk'}</span>
-            <select value={language} onChange={(e)=>onLanguageChange((e.target.value as Language))} style={{padding:'8px 12px',borderRadius:8,border:'1px solid #333',background:'#151515',color:'#fff'}}>
-              <option value="no">Norsk</option>
-              <option value="en">English</option>
-            </select>
+            <span>{language==='en' ? 'Players (3–15)' : 'Antall spillere (3–15)'}</span>
+            <input type="number" min={3} max={15} value={players} onChange={(e)=>setPlayers(parseInt(e.target.value || '0',10))} style={{padding:'8px 12px',borderRadius:8,border:'1px solid #333',background:'#151515',color:'#fff'}} />
           </label>
-          <button type="button" onClick={onOpenHowTo} style={{padding:'8px 12px',borderRadius:8,border:'1px solid #333',background:'#151515',color:'#fff'}}>{language==='en' ? 'How to play' : 'Hvordan spille'}</button>
+          {!playersValid && (<div style={{color:'#fca5a5'}}>{language==='en' ? 'Player count must be between 3 and 15.' : 'Antall spillere må være mellom 3 og 15.'}</div>)}
+
+          <label style={{display:'grid',gap:8}}>
+            <span>{(language==='en' ? 'Spies (max {max})' : 'Spioner (maks {max})').replace('{max}', String(maxImposters))}</span>
+            <input type="number" min={1} max={maxImposters} value={safeImposters} onChange={(e)=>setImposters(parseInt(e.target.value || '1',10))} style={{padding:'8px 12px',borderRadius:8,border:'1px solid #333',background:'#151515',color:'#fff'}} />
+          </label>
+          {!impostersValid && (<div style={{color:'#fca5a5'}}>{(language==='en' ? 'Spies must be between 1 and {max}.' : 'Antall spioner må være mellom 1 og {max}.').replace('{max}', String(maxImposters))}</div>)}
+
+          <label style={{display:'flex',alignItems:'center',gap:12}}>
+            <input type="checkbox" checked={timerEnabled} onChange={(e)=>setTimerEnabled(e.target.checked)} />
+            <span>{language==='en' ? 'Discussion timer' : 'Timer under diskusjon'}</span>
+          </label>
+          {timerEnabled && (
+            <label style={{display:'grid',gap:8}}>
+              <span>{language==='en' ? 'Timer seconds' : 'Timer-sekunder'}</span>
+              <input type="number" min={60} max={1200} value={seconds} onChange={(e)=>setSeconds(parseInt(e.target.value || '480',10))} style={{padding:'8px 12px',borderRadius:8,border:'1px solid #333',background:'#151515',color:'#fff'}} />
+            </label>
+          )}
         </div>
-
-        <label style={{display:'grid',gap:8}}>
-          <span>{language==='en' ? 'Players (3–15)' : 'Antall spillere (3–15)'}</span>
-          <input type="number" min={3} max={15} value={players} onChange={(e)=>setPlayers(parseInt(e.target.value || '0',10))} style={{padding:'8px 12px',borderRadius:8,border:'1px solid #333',background:'#151515',color:'#fff'}} />
-        </label>
-        {!playersValid && (<div style={{color:'#fca5a5'}}>{language==='en' ? 'Player count must be between 3 and 15.' : 'Antall spillere må være mellom 3 og 15.'}</div>)}
-
-        <label style={{display:'grid',gap:8}}>
-          <span>{(language==='en' ? 'Spies (max {max})' : 'Spioner (maks {max})').replace('{max}', String(maxImposters))}</span>
-          <input type="number" min={1} max={maxImposters} value={safeImposters} onChange={(e)=>setImposters(parseInt(e.target.value || '1',10))} style={{padding:'8px 12px',borderRadius:8,border:'1px solid #333',background:'#151515',color:'#fff'}} />
-        </label>
-        {!impostersValid && (<div style={{color:'#fca5a5'}}>{(language==='en' ? 'Spies must be between 1 and {max}.' : 'Antall spioner må være mellom 1 og {max}.').replace('{max}', String(maxImposters))}</div>)}
-
-        <label style={{display:'flex',alignItems:'center',gap:12}}>
-          <input type="checkbox" checked={timerEnabled} onChange={(e)=>setTimerEnabled(e.target.checked)} />
-          <span>{language==='en' ? 'Discussion timer' : 'Timer under diskusjon'}</span>
-        </label>
-        {timerEnabled && (
-          <label style={{display:'grid',gap:8}}>
-            <span>{language==='en' ? 'Timer seconds' : 'Timer-sekunder'}</span>
-            <input type="number" min={60} max={1200} value={seconds} onChange={(e)=>setSeconds(parseInt(e.target.value || '480',10))} style={{padding:'8px 12px',borderRadius:8,border:'1px solid #333',background:'#151515',color:'#fff'}} />
-          </label>
-        )}
-
-        <button disabled={!playersValid || !impostersValid} onClick={()=>onStart(players, safeImposters, timerEnabled, seconds)} style={{padding:'12px 16px',borderRadius:8,border:'none',background:(!playersValid||!impostersValid)?'#374151':'#22c55e',color:'#000',fontWeight:700}}>{language==='en' ? 'Start' : 'Start'}</button>
+        <div style={{display:'flex',justifyContent:'space-between',gap:12,marginTop:16}}>
+          {onChangeMode && (
+            <button onClick={()=>onChangeMode('classic')} style={{padding:'8px 12px',borderRadius:8,border:'1px solid #333',background:'#151515',color:'#fff'}}>{language==='en' ? 'Switch to Classic' : 'Bytt til Klassisk'}</button>
+          )}
+          <button type="button" onClick={onOpenHowTo} style={{padding:'8px 12px',borderRadius:8,border:'1px solid #333',background:'#151515',color:'#fff'}}>{language==='en' ? 'How to play' : 'Hvordan spille'}</button>
+          <div style={{flex:1}} />
+          <button disabled={!playersValid || !impostersValid} onClick={()=>onStart(players, safeImposters, timerEnabled, seconds)} style={{padding:'12px 16px',borderRadius:8,border:'none',background:(!playersValid||!impostersValid)?'#374151':'#22c55e',color:'#000',fontWeight:700}}>{language==='en' ? 'Start' : 'Start'}</button>
+        </div>
       </div>
     </Card>
   )
@@ -219,11 +236,11 @@ function Reveal({ playerIndex, totalPlayers, isImposter, location, role, onNext,
   const [visible, setVisible] = useState(true)
   const isLast = playerIndex + 1 >= totalPlayers
   return (
-    <Card title={(language==='en' ? 'Player # {cur}/{total}' : 'Spiller # {cur}/{total}').replace('{cur}', String(playerIndex+1)).replace('{total}', String(totalPlayers))} right={
+    <Card title={(language==='en' ? 'Player # {cur}/{total}' : 'Spiller # {cur}/{total}').replace('{cur}', String(playerIndex+1)).replace('{total}', String(totalPlayers))} height={'min(450px, 75vh)'} right={
       <div style={{fontSize:32,filter: isImposter ? 'drop-shadow(0 0 6px rgba(225,29,72,0.6))' : 'drop-shadow(0 0 6px rgba(34,197,94,0.6))',transform:'scale(0.9)',transition:'transform 250ms ease, filter 250ms ease',animation:'iconfade 350ms ease'}} onMouseEnter={(e)=>{ (e.currentTarget as HTMLDivElement).style.transform = 'scale(1)' }} onMouseLeave={(e)=>{ (e.currentTarget as HTMLDivElement).style.transform = 'scale(0.9)' }}>{isImposter ? '🎭' : '🛡️'}</div>
     }>
-      <div style={{display:'grid',gap:24,textAlign:'center'}}>
-        <div style={{opacity:visible?1:0,transition:'opacity 300ms'}}>
+      <div style={{display:'grid',gridTemplateRows:'1fr auto',height:'100%'}}>
+        <div style={{opacity:visible?1:0,transition:'opacity 300ms',textAlign:'center'}}>
           {!isImposter && (
             <>
               <div style={{fontSize:18,opacity:0.85}}>{language==='en' ? 'Location' : 'Sted'}</div>
@@ -243,11 +260,13 @@ function Reveal({ playerIndex, totalPlayers, isImposter, location, role, onNext,
             </>
           )}
         </div>
-        {visible ? (
-          <button onClick={()=>{ setVisible(false) }} style={{padding:'12px 16px',borderRadius:8,border:'none',background:'#e11d48',color:'#fff',fontWeight:600}}>{language==='en' ? 'OK / Hide' : 'OK / Skjul'}</button>
-        ) : (
-          <button onClick={()=>{ setVisible(true); onNext(); }} style={{padding:'12px 16px',borderRadius:8,border:'none',background:'#22c55e',color:'#000',fontWeight:700}}>{isLast ? (language==='en' ? 'Start round' : 'Start runde') : (language==='en' ? 'Show player # {num}' : 'Vis spiller # {num}').replace('{num}', String(playerIndex+2))}</button>
-        )}
+        <div style={{display:'flex',justifyContent:'center'}}>
+          {visible ? (
+            <button onClick={()=>{ setVisible(false) }} style={{padding:'12px 16px',borderRadius:8,border:'none',background:'#e11d48',color:'#fff',fontWeight:600}}>{language==='en' ? 'OK / Hide' : 'OK / Skjul'}</button>
+          ) : (
+            <button onClick={()=>{ setVisible(true); onNext(); }} style={{padding:'12px 16px',borderRadius:8,border:'none',background:'#22c55e',color:'#000',fontWeight:700}}>{isLast ? (language==='en' ? 'Start round' : 'Start runde') : (language==='en' ? 'Show player # {num}' : 'Vis spiller # {num}').replace('{num}', String(playerIndex+2))}</button>
+          )}
+        </div>
       </div>
     </Card>
   )
@@ -267,20 +286,27 @@ if (!styleEl) {
 function Discussion({ location, onStartTimer, timerEnabled, seconds, countdown, onEnd, language }: { location: string; onStartTimer: () => void; timerEnabled: boolean; seconds: number; countdown: number | null; onEnd: () => void; language: Language }) {
   return (
     <Card title={language==='en' ? 'Discussion' : 'Diskusjon'}>
-      <div style={{display:'grid',gap:16,textAlign:'center'}}>
-        {/* Location intentionally hidden during discussion to avoid revealing to the Spy */}
-        {timerEnabled ? (
-          <div>
-            {countdown === null ? (
-              <button onClick={onStartTimer} style={{padding:'12px 16px',borderRadius:8,border:'none',background:'#4f46e5',color:'#fff',fontWeight:600}}>{(language==='en' ? 'Start timer ({seconds}s)' : 'Start timer ({seconds}s)').replace('{seconds}', String(seconds))}</button>
-            ) : (
-              <div style={{fontSize:48,fontWeight:800}}>{countdown}</div>
-            )}
-          </div>
-        ) : (
-          <div style={{opacity:0.8}}>{language==='en' ? 'Timer off. Press "Next" when ready.' : 'Timer av. Trykk "Neste" når dere er klare.'}</div>
-        )}
-        <button onClick={onEnd} style={{padding:'12px 16px',borderRadius:8,border:'none',background:'#22c55e',color:'#000',fontWeight:700}}>{language==='en' ? 'Start voting' : 'Start avstemning'}</button>
+      <div style={{display:'grid',gridTemplateRows:'1fr auto',height:'100%'}}>
+        <div style={{textAlign:'center',display:'grid',gap:16}}>
+          {/* Location intentionally hidden during discussion to avoid revealing to the Spy */}
+          {timerEnabled ? (
+            <div>
+              {countdown === null ? (
+                <div style={{opacity:0.8}}>{language==='en' ? 'Timer is ready' : 'Timer klar'}</div>
+              ) : (
+                <div style={{fontSize:48,fontWeight:800}}>{countdown}</div>
+              )}
+            </div>
+          ) : (
+            <div style={{opacity:0.8}}>{language==='en' ? 'Timer off. Press "Next" when ready.' : 'Timer av. Trykk "Neste" når dere er klare.'}</div>
+          )}
+        </div>
+        <div style={{display:'flex',justifyContent:'center',gap:12,marginTop:16}}>
+          {timerEnabled && countdown === null && (
+            <button onClick={onStartTimer} style={{padding:'12px 16px',borderRadius:8,border:'none',background:'#4f46e5',color:'#fff',fontWeight:600}}>{(language==='en' ? 'Start timer ({seconds}s)' : 'Start timer ({seconds}s)').replace('{seconds}', String(seconds))}</button>
+          )}
+          <button onClick={onEnd} style={{padding:'12px 16px',borderRadius:8,border:'none',background:'#22c55e',color:'#000',fontWeight:700}}>{language==='en' ? 'Start voting' : 'Start avstemning'}</button>
+        </div>
       </div>
     </Card>
   )
@@ -289,11 +315,15 @@ function Discussion({ location, onStartTimer, timerEnabled, seconds, countdown, 
 function Result({ imposterIndices, location, onRestart, language }: { imposterIndices: number[]; location: string; onRestart: () => void; language: Language }) {
   return (
     <Card title={language==='en' ? 'Result' : 'Resultat'}>
-      <div style={{display:'grid',gap:16,textAlign:'center'}}>
-        <div style={{fontSize:20}}>{language==='en' ? 'Location' : 'Sted'}</div>
-        <div style={{fontSize:40,fontWeight:800}}>{location}</div>
-        <div style={{fontSize:20,marginTop:16}}>{(language==='en' ? 'Spies:' : 'Spion(er):')} {imposterIndices.map(i=>`#${i+1}`).join(', ')}</div>
-        <button onClick={onRestart} style={{padding:'12px 16px',borderRadius:8,border:'none',background:'#4f46e5',color:'#fff',fontWeight:600}}>{language==='en' ? 'Start new game' : 'Start nytt spill'}</button>
+      <div style={{display:'grid',gridTemplateRows:'1fr auto',height:'100%'}}>
+        <div style={{display:'grid',gap:16,textAlign:'center'}}>
+          <div style={{fontSize:20}}>{language==='en' ? 'Location' : 'Sted'}</div>
+          <div style={{fontSize:40,fontWeight:800}}>{location}</div>
+          <div style={{fontSize:20,marginTop:16}}>{(language==='en' ? 'Spies:' : 'Spion(er):')} {imposterIndices.map(i=>`#${i+1}`).join(', ')}</div>
+        </div>
+        <div style={{display:'flex',justifyContent:'center',marginTop:16}}>
+          <button onClick={onRestart} style={{padding:'12px 16px',borderRadius:8,border:'none',background:'#4f46e5',color:'#fff',fontWeight:600}}>{language==='en' ? 'Start new game' : 'Start nytt spill'}</button>
+        </div>
       </div>
     </Card>
   )
@@ -302,7 +332,8 @@ function Result({ imposterIndices, location, onRestart, language }: { imposterIn
 function HowTo({ language, onBack }: { language: Language; onBack: () => void }) {
   return (
     <Card title={language==='en' ? 'How to Play Spyfall' : 'Hvordan spille Spyfall'}>
-      <div style={{display:'grid',gap:12}}>
+      <div style={{display:'grid',gridTemplateRows:'1fr auto',height:'100%'}}>
+        <div style={{display:'grid',gap:12}}>
         {language==='en' ? (
           <div>
             So fun that you asked about <b>Spyfall</b>! It's a popular party game of bluffing and asking the right (and wrong) questions.
@@ -335,6 +366,7 @@ function HowTo({ language, onBack }: { language: Language; onBack: () => void })
         ) : (
           <SpyfallDescriptionNO />
         )}
+        </div>
         <div style={{display:'flex',justifyContent:'flex-end'}}>
           <button onClick={onBack} style={{padding:'8px 12px',borderRadius:8,border:'none',background:'#4f46e5',color:'#fff',fontWeight:600}}>{language==='en' ? 'Back' : 'Tilbake'}</button>
         </div>
