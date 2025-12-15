@@ -268,8 +268,7 @@ function Discussion({ location, onStartTimer, timerEnabled, seconds, countdown, 
   return (
     <Card title={language==='en' ? 'Discussion' : 'Diskusjon'}>
       <div style={{display:'grid',gap:16,textAlign:'center'}}>
-        <div style={{fontSize:18,opacity:0.85}}>{language==='en' ? 'Location' : 'Sted'}</div>
-        <div style={{fontSize:24,marginBottom:16}}>{location}</div>
+        {/* Location intentionally hidden during discussion to avoid revealing to the Spy */}
         {timerEnabled ? (
           <div>
             {countdown === null ? (
