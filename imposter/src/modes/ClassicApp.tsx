@@ -140,7 +140,8 @@ export default function ClassicApp({ onChangeMode }: { onChangeMode?: (m: 'class
     try { const raw = localStorage.getItem('imposterwho:last'); if (raw) last = JSON.parse(raw) } catch {}
     const { category, word } = pickCategoryAndWord(last, language)
     const indices: number[] = []
-    while (indices.length < imposterCount) { const r = randomInt(playerCount); if (!indices.includes(r)) indices.push(r) }
+    const targetImposters = Math.min(imposterCount, playerCount)
+    while (indices.length < targetImposters) { const r = randomInt(playerCount); if (!indices.includes(r)) indices.push(r) }
     const gameState: GameState = { playerCount, imposterIndices: indices.sort((a,b)=>a-b), category, secretWord: word, currentRevealIndex: 0, timerEnabled, timerSeconds }
     setState(gameState)
     setPhase('pre-reveal')
@@ -219,11 +220,11 @@ function Setup({ onStart, language, onLanguageChange, onChangeMode }: { onStart:
   const [players, setPlayers] = useState(6)
   const [timerEnabled, setTimerEnabled] = useState(true)
   const [seconds, setSeconds] = useState(60)
-  const maxImposters = Math.max(1, Math.floor(players / 3))
+  const maxImposters = players
   const [imposters, setImposters] = useState(1)
-  const safeImposters = Math.min(imposters, maxImposters)
   const playersValid = players >= 3 && players <= 15
-  const impostersValid = safeImposters >= 1 && safeImposters <= maxImposters
+  const impostersValid = imposters >= 1 && imposters <= maxImposters
+  const safeImposters = Math.min(imposters, maxImposters)
 
   useEffect(() => {
     try {
@@ -239,6 +240,11 @@ function Setup({ onStart, language, onLanguageChange, onChangeMode }: { onStart:
       if (langRaw === 'en' || langRaw === 'no') onLanguageChange(langRaw)
     } catch {}
   }, [])
+
+  // Ensure imposters stays within valid range when player count changes
+  useEffect(() => {
+    setImposters((prev) => Math.min(Math.max(1, prev), maxImposters))
+  }, [maxImposters])
 
   useEffect(() => {
     const payload = { players, imposters: safeImposters, timerEnabled, seconds }
@@ -259,13 +265,13 @@ function Setup({ onStart, language, onLanguageChange, onChangeMode }: { onStart:
 
           <label style={{display:'grid',gap:8}}>
             <span>{t(language,'players')}</span>
-            <input type="number" min={3} max={15} value={players} onChange={(e)=>setPlayers(parseInt(e.target.value || '0',10))} style={{padding:'8px 12px',borderRadius:8,border:'1px solid #333',background:'#151515',color:'#fff'}} />
+            <input type="number" min={3} max={15} value={players} inputMode="numeric" onChange={(e)=>{ const raw = e.target.value; const n = parseInt(raw, 10); setPlayers(Number.isNaN(n) ? 0 : n) }} style={{padding:'8px 12px',borderRadius:8,border:'1px solid #333',background:'#151515',color:'#fff'}} />
           </label>
           {!playersValid && (<div style={{color:'#fca5a5'}}>{t(language,'playersInvalid')}</div>)}
 
           <label style={{display:'grid',gap:8}}>
             <span>{t(language,'imposters').replace('{max}', String(maxImposters))}</span>
-            <input type="number" min={1} max={maxImposters} value={safeImposters} onChange={(e)=>setImposters(parseInt(e.target.value || '1',10))} style={{padding:'8px 12px',borderRadius:8,border:'1px solid #333',background:'#151515',color:'#fff'}} />
+            <input type="number" inputMode="numeric" value={imposters} onFocus={(e)=>e.target.select()} onChange={(e)=>{ const val = e.target.value; setImposters(val === '' ? 0 : parseInt(val, 10)) }} style={{padding:'8px 12px',borderRadius:8,border:'1px solid #333',background:'#151515',color:'#fff'}} />
           </label>
           {!impostersValid && (<div style={{color:'#fca5a5'}}>{t(language,'impostersInvalid').replace('{max}', String(maxImposters))}</div>)}
 

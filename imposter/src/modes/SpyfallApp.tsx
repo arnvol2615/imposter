@@ -198,7 +198,7 @@ function Setup({ onStart, language, onLanguageChange, onOpenHowTo, onChangeMode 
 
           <label style={{display:'grid',gap:8}}>
             <span>{language==='en' ? 'Players (3–15)' : 'Antall spillere (3–15)'}</span>
-            <input type="number" min={3} max={15} value={players} onChange={(e)=>setPlayers(parseInt(e.target.value || '0',10))} style={{padding:'8px 12px',borderRadius:8,border:'1px solid #333',background:'#151515',color:'#fff'}} />
+            <input type="number" min={3} max={15} value={players} inputMode="numeric" onChange={(e)=>{ const raw = e.target.value; const n = parseInt(raw, 10); setPlayers(Number.isNaN(n) ? 0 : n) }} style={{padding:'8px 12px',borderRadius:8,border:'1px solid #333',background:'#151515',color:'#fff'}} />
           </label>
           {!playersValid && (<div style={{color:'#fca5a5'}}>{language==='en' ? 'Player count must be between 3 and 15.' : 'Antall spillere må være mellom 3 og 15.'}</div>)}
 
